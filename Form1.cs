@@ -46,7 +46,7 @@ namespace Diplom
             weight = new Int32[10] { 10, 20, 30, 40, 50, 60 ,70, 80, 90, 100 };
             Random rand = new Random();
             dataGridView1.ColumnCount = 6;
-            dataGridView2.ColumnCount = 7;
+            dataGridView2.ColumnCount = 8;
 
             for (int i = 0; i < 30; i++)
             {
@@ -65,7 +65,11 @@ namespace Diplom
                 dataGridView1[4, i].Value = Population.SUMM_VAL;
             }
             reproduction(Population, weight);
-
+            Population.mutation(weight);
+            for (int i = 0; i < 30; i++)
+            {
+                dataGridView2[7, i].Value = Population.childrensList[i].GEN;
+            }
         }
     }
 }

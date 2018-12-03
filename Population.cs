@@ -12,6 +12,7 @@ namespace Diplom
         double maxFunctionValue;
         double mediumFunctionValue;
         double summFunctionValue;
+        double mutationChance;
         public List<Chrom> gensList;
         public List<Chrom> parentsList;
         public List<Chrom> childrensList;
@@ -49,6 +50,7 @@ namespace Diplom
 
         public Population(List<Chrom> newGensList, int populationSize)
         {
+            this.mutationChance = 0.5;
             this.populationSize = populationSize;
             gensList = new List<Chrom>();
             parentsList = new List<Chrom>();
@@ -97,6 +99,27 @@ namespace Diplom
                 string childB = mother.Substring(0, crossingoverDot) + father.Substring(crossingoverDot);
                 childrensList.Add(new Chrom(childA, weight));
                 childrensList.Add(new Chrom(childB, weight));
+            }
+        }
+        public void mutation(int[] weight) {
+            Random mutationRandom = new Random();
+            Random genRandom = new Random();
+            List<Chrom> tmpList = new List<Chrom>(childrensList);
+            childrensList.Clear();
+            for (int i = 0; i < tmpList.Count; i++)
+            {
+                double canMutatuin = mutationRandom.NextDouble();
+                if (canMutatuin <= mutationChance)
+                {
+                    int genMutationPosition = genRandom.Next(0, tmpList[i].GEN.Length);
+                    tmpList[i].setGen(genMutationPosition, tmpList[i].getGen(0) == 1 ? 0 : 1);
+                }
+                string newGen = "";
+                for (int j = 0; j < tmpList[i].genotip.Length; j++)
+                {
+                    newGen += tmpList[i].getGen(j).ToString();
+                }
+                childrensList.Add(new Chrom(newGen, weight));
             }
         }
     }
