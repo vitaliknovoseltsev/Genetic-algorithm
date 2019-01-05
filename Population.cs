@@ -50,7 +50,7 @@ namespace Diplom
 
         public Population(List<Chrom> newGensList, int populationSize)
         {
-            this.mutationChance = 0.5;
+            this.mutationChance = 1.0;
             this.populationSize = populationSize;
             gensList = new List<Chrom>();
             parentsList = new List<Chrom>();
@@ -68,12 +68,12 @@ namespace Diplom
             gensList.Sort((a, b) => b.FUN.CompareTo(a.FUN));
             Random rand = new Random();
             double summOfChance;
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < gensList.Count; i++)
             {
                 Chrom gen = getGen(i);
                 double randomVal = rand.NextDouble();
-                summOfChance = 0;
-                for (int j = 0; j < 30; j++)
+                summOfChance = 0.0;
+                for (int j = 0; j < gensList.Count; j++)
                 {
                     Chrom newGen = getGen(j);
                     summOfChance += newGen.CHANCE;
@@ -82,7 +82,17 @@ namespace Diplom
                         parentsList.Add(newGen);
                         break;
                     }
+                    
                 }
+            }
+            if (parentsList.Count != populationSize)
+            {
+                int size = populationSize - parentsList.Count;
+                for (int i = 0; i < size; i++)
+                {
+                    parentsList.Add(getGen(i));
+                }
+                
             }
         }
         // Оператор Кроссинговера
@@ -101,7 +111,8 @@ namespace Diplom
                 childrensList.Add(new Chrom(childB, weight));
             }
         }
-        public void mutation(int[] weight) {
+        public void mutation(int[] weight)
+        {
             Random mutationRandom = new Random();
             Random genRandom = new Random();
             List<Chrom> tmpList = new List<Chrom>(childrensList);
@@ -121,6 +132,32 @@ namespace Diplom
                 }
                 childrensList.Add(new Chrom(newGen, weight));
             }
+            for (int i = 0; i < tmpList.Count; i++)
+            {
+                childrensList[i].TMPGEN = tmpList[i].GEN;
+            }
+        }
+
+        public void createNewPopulation()
+        {
+            gensList.Clear();
+            List<Chrom> tmpList = new List<Chrom>();
+            for (int i = 0; i < populationSize; i++)
+            {
+                tmpList.Add(childrensList[i]);
+                tmpList.Add(parentsList[i]);
+            }
+            tmpList.Sort((a, b) => b.FUN.CompareTo(a.FUN));
+            for (int i = 0; i < populationSize; i++)
+            {
+                gensList.Add(tmpList[i]);
+            }
+            tmpList.Clear();
+        }
+        public void clearPopulation()
+        {
+            parentsList.Clear();
+            childrensList.Clear();
         }
     }
 }

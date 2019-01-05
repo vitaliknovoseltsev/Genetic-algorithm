@@ -13,6 +13,7 @@ namespace Diplom
         int lenght;
         int function;
         double chanceValue;
+        string tmpgen;
 
         public int LENGTH
         {
@@ -23,6 +24,11 @@ namespace Diplom
         {
             get { return gen; }
             set { gen = value; }
+        }
+        public string TMPGEN
+        {
+            get { return tmpgen; }
+            set { tmpgen = value; }
         }
         public int FUN
         {
@@ -50,6 +56,11 @@ namespace Diplom
                 gen += genotip[i].ToString();
                 function += (genotip[i] == 1) ? weight[i] : 0;
             }
+        }
+        public Chrom() {
+            this.CHANCE = 0;
+            this.FUN = 0;
+            this.GEN = "0000000";
         }
         public Chrom(string str, int []weight)
         {
